@@ -5,20 +5,27 @@ import {
   safePolygon,
   useInteractions,
   useDismiss,
+  arrow,
+  FloatingArrow,
+  offset,
+  flip,
+  shift,
 } from "@floating-ui/react";
-import { cloneElement, useState } from "react";
+import { Children } from "react";
+import { createElement, cloneElement, useState, useRef } from "react";
 
 export const Popper = ({
   children,
   trigger,
   open,
   onOpenChange,
-  placement = "bottom",
+  placement = "left",
   dismiss = true,
   hover = false,
   click = true,
 }) => {
   const [ownOpen, setOwnOpen] = useState(false);
+  const arrowRef = useRef(null);
 
   const finalOpen = open ?? ownOpen;
   const finalSetOpen = onOpenChange ?? setOwnOpen;
@@ -27,6 +34,14 @@ export const Popper = ({
     open: finalOpen,
     onOpenChange: finalSetOpen,
     placement,
+    middleware: [
+      offset(9),
+      flip(),
+      shift(),
+      arrow({
+        element: arrowRef,
+      }),
+    ],
   });
 
   const clickFn = useClick(context, {
@@ -58,12 +73,20 @@ export const Popper = ({
         })}
       {finalOpen &&
         children &&
-        cloneElement(children, {
-          style: floatingStyles,
-          ...getFloatingProps({
-            ref: refs.setFloating,
-          }),
-        })}
+        cloneElement(
+          children,
+          {
+            style: floatingStyles,
+            ...getFloatingProps({
+              ref: refs.setFloating,
+            }),
+          },
+          ...Children.map(children, (child) => child),
+          createElement(FloatingArrow, {
+            ref: arrowRef,
+            context,
+          })
+        )}
     </>
   );
 };
