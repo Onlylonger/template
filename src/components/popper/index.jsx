@@ -5,24 +5,29 @@ import {
   safePolygon,
   useInteractions,
   useDismiss,
-  arrow,
+  arrow as arrowMiddleware,
   FloatingArrow,
-  offset,
-  flip,
-  shift,
+  offset as offsetMiddleware,
+  flip as flipMiddleware,
+  shift as shiftMiddleware,
 } from "@floating-ui/react";
 import { Children } from "react";
 import { createElement, cloneElement, useState, useRef } from "react";
+
+const ARROW_HEIGHT = 7;
 
 export const Popper = ({
   children,
   trigger,
   open,
   onOpenChange,
-  placement = "left",
+  placement = "bottom",
   dismiss = true,
   hover = false,
   click = true,
+  arrow = false,
+  offsetHeight = 0,
+  floatingArrowProps = {},
 }) => {
   const [ownOpen, setOwnOpen] = useState(false);
   const arrowRef = useRef(null);
@@ -35,12 +40,16 @@ export const Popper = ({
     onOpenChange: finalSetOpen,
     placement,
     middleware: [
-      offset(9),
-      flip(),
-      shift(),
-      arrow({
-        element: arrowRef,
-      }),
+      offsetMiddleware(
+        (arrow ? floatingArrowProps?.height || ARROW_HEIGHT : 0) + offsetHeight
+      ),
+      flipMiddleware(),
+      shiftMiddleware(),
+      arrow
+        ? arrowMiddleware({
+            element: arrowRef,
+          })
+        : undefined,
     ],
   });
 
@@ -71,22 +80,28 @@ export const Popper = ({
             ref: refs.setReference,
           }),
         })}
-      {finalOpen &&
-        children &&
-        cloneElement(
-          children,
-          {
-            style: floatingStyles,
-            ...getFloatingProps({
-              ref: refs.setFloating,
-            }),
-          },
-          ...Children.map(children, (child) => child),
-          createElement(FloatingArrow, {
-            ref: arrowRef,
-            context,
-          })
-        )}
+      {finalOpen && children && (
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles}
+          {...getFloatingProps()}
+        >
+          {cloneElement(
+            children,
+            {
+              //
+            },
+            ...Children.map(children.props?.children, (child) => child),
+            arrow
+              ? createElement(FloatingArrow, {
+                  ...floatingArrowProps,
+                  ref: arrowRef,
+                  context,
+                })
+              : null
+          )}
+        </div>
+      )}
     </>
   );
 };

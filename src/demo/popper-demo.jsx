@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Popper } from "../components/popper";
+import { Button } from "../components/button";
 
 export const PopperDemo = () => {
   const [open, setOpen] = useState(false);
@@ -8,12 +9,13 @@ export const PopperDemo = () => {
 
   return (
     <>
+      <h2>Popper</h2>
       <div>
         <Popper
           open={open}
           onOpenChange={setOpen}
           trigger={
-            <button onClick={() => setOpen(true)}>Controlled click test</button>
+            <Button onClick={() => setOpen(true)}>Controlled click test</Button>
           }
         >
           <div>floating</div>
@@ -24,9 +26,9 @@ export const PopperDemo = () => {
           click={false}
           hover
           trigger={
-            <button onMouseEnter={() => setHoverOpen(true)}>
+            <Button onMouseEnter={() => setHoverOpen(true)}>
               Controlled hover test
-            </button>
+            </Button>
           }
         >
           <div>floating</div>
@@ -36,31 +38,30 @@ export const PopperDemo = () => {
           onOpenChange={setHoverClickOpen}
           hover
           trigger={
-            <button onMouseEnter={() => setHoverClickOpen(true)}>
+            <Button onMouseEnter={() => setHoverClickOpen(true)}>
               Controlled click & hover test
-            </button>
+            </Button>
           }
         >
           <div>floating</div>
         </Popper>
-        <Popper trigger={<button>Uncontrolled click test</button>}>
+        <Popper trigger={<Button>Uncontrolled click test</Button>}>
           <div>floating</div>
         </Popper>
         <Popper
           hover
           click={false}
-          trigger={<button>Uncontrolled hover test</button>}
+          trigger={<Button>Uncontrolled hover test</Button>}
         >
           <div>floating</div>
         </Popper>
         <Popper
           hover
-          trigger={<button>Uncontrolled click & hover test</button>}
+          trigger={<Button>Uncontrolled click & hover test</Button>}
         >
           <div>floating</div>
         </Popper>
       </div>
-      <div></div>
     </>
   );
 };
