@@ -12,29 +12,31 @@ export const MainLayout = () => {
     <div className="flex">
       <div
         className={clsx(
-          "shrink-0 h-svh bg-red-100 relative",
-          !co ? "w-[160px]" : "w-[60px]"
+          "relative h-svh shrink-0 bg-red-100",
+          !co ? "w-[160px]" : "w-[60px]",
         )}
       >
-        <Link to="/">Home</Link>
-        <Link to="/user">User</Link>
-        <Link to="/role">Role</Link>
+        <div className="flex flex-col gap-4">
+          <Link to="/">Home</Link>
+          <Link to="/user">User</Link>
+          <Link to="/role">Role</Link>
+        </div>
         <div
-          className="absolute right-0 top-5 cursor-pointer"
+          className="absolute top-5 right-0 cursor-pointer"
           onClick={handleCollaps}
         >
           三
         </div>
       </div>
-      <div className="flex-1 flex flex-col">
-        <div className="h-16 flex items-center bg-gray-100 shrink-0">
+      <div className="flex flex-1 flex-col">
+        <div className="flex h-16 shrink-0 items-center bg-gray-100">
           header
         </div>
-        <div className="flex flex-col bg-gray-200 overflow-y-auto h-[calc(100svh-(--spacing(16))))]">
+        <div className="flex h-[calc(100svh-(--spacing(16))))] flex-col overflow-y-auto bg-gray-200">
           <div className="flex-1">
             <Outlet></Outlet>
           </div>
-          <div className="bg-white text-center mt-4 shrink-0 ">
+          <div className="mt-4 shrink-0 bg-white text-center">
             Copyright MIT © {new Date().getFullYear()} Template
           </div>
         </div>
