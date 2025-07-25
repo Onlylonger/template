@@ -3,6 +3,8 @@ import { MainLayout } from "../components/main-layout/MainLayout";
 import { Home } from "../components/home/Home";
 import { LoginPage } from "../pages/Login";
 import { menuKey } from "./const";
+import { UserPage } from "../pages/user/User";
+import { UserDetailPage } from "../pages/user/UserDetail";
 
 export const router = createBrowserRouter([
   {
@@ -30,7 +32,14 @@ export const router = createBrowserRouter([
           },
           {
             path: "user",
-            element: "user",
+            element: <UserPage />,
+            handle: {
+              menuKey: menuKey.user,
+            },
+          },
+          {
+            path: "user/:id",
+            element: <UserDetailPage />,
             handle: {
               menuKey: menuKey.user,
             },
