@@ -1,41 +1,75 @@
-import { Link, useNavigate } from "react-router";
+import { Button } from "@/components/button";
+import { useRef, useState } from "react";
+import { Link } from "react-router";
+
+const mockList = [
+  {
+    id: "1",
+    company: "Germany",
+    contact: "Mexico",
+    country: "Francisco Chang",
+  },
+  {
+    id: "2",
+    company: "UK",
+    contact: "MM",
+    country: "LonDon",
+  },
+];
 
 export const UserPage = () => {
-  const nav = useNavigate();
+  const [list, setList] = useState(mockList);
+  const ref = useRef<HTMLInputElement | null>(null);
 
-  const handleLogin = () => {
-    localStorage.setItem("token", "aaa");
-    nav("/");
+  const handleSearch = () => {
+    const val = ref.current?.value;
+    if (val) {
+      const filterList = list.filter((v) => {
+        return v.company.indexOf(val) > -1;
+      });
+      setList(filterList);
+    } else {
+      setList(mockList);
+    }
   };
 
   return (
-    <div className="">
-      <div className="">
-        <label htmlFor="name">Name:</label>
-        <input type="text" id="name" />
+    <div className="px-2">
+      <div className="flex flex-col gap-2">
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            ref={ref}
+            className="rounded-md border border-black px-2"
+          />
+        </div>
+        <div className="text-right">
+          <Button onClick={handleSearch}>Search</Button>
+        </div>
       </div>
       <div className="">
         <table>
           <thead>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
+            <tr>
+              <th>Company</th>
+              <th>Contact</th>
+              <th>Country</th>
+            </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>
-                <Link to="/user/1">Centro comercial Moctezuma</Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Germany</td>
-              <td>Mexico</td>
-              <td>
-                <Link to="/user/2">Francisco Chang</Link>
-              </td>
-            </tr>
+            {list.map((v) => {
+              return (
+                <tr key={v.id}>
+                  <td>{v.company}</td>
+                  <td>{v.contact}</td>
+                  <td>
+                    <Link to={`/user/${v.id}`}>{v.country}</Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

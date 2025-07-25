@@ -23,7 +23,7 @@ const ArrowRight = () => {
 };
 
 export const NavigationMenu = (props: NavigationMenuProps) => {
-  const { list, onClick, activeKey, activeClassName } = props;
+  const { list, onClick, activeKey, activeClassName = "bg-amber-200" } = props;
   const [colMap, setColMap] = useState(() => {
     const tmp: { [key: string]: boolean } = {};
     list.forEach((v) => {
@@ -42,7 +42,7 @@ export const NavigationMenu = (props: NavigationMenuProps) => {
             v.children.filter((c) => c.key === activeKey).length > 0;
 
           return (
-            <div key={v.key} className={clsx(groupActive && "bg-amber-200")}>
+            <div key={v.key} className={clsx(groupActive && activeClassName)}>
               <span
                 className={clsx("inline-block")}
                 onClick={() => {
