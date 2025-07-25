@@ -1,12 +1,28 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { Navigate, Outlet, useMatches, useNavigate } from "react-router";
+import { Header } from "../header/Header";
+import { NavigationMenu, type MenuItem } from "../menu/NavigationMenu";
+import { menuList } from "../../router/const";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);
+
+  const nav = useNavigate();
+  const match = useMatches();
+  const { menuKey } = match[match.length - 1].handle ?? {};
+
+  const activeKey = menuKey;
+
+  console.log(activeKey);
+
   const handleCollaps = () => {
     setCo(!co);
   };
+
+  if (!localStorage.getItem("token")) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="flex">
@@ -17,9 +33,16 @@ export const MainLayout = () => {
         )}
       >
         <div className="flex flex-col gap-4">
-          <Link to="/">Home</Link>
-          <Link to="/user">User</Link>
-          <Link to="/role">Role</Link>
+          <NavigationMenu
+            list={menuList}
+            onClick={(v: MenuItem) => {
+              console.log(v);
+              if (v.url) {
+                nav(v.url);
+              }
+            }}
+            activeKey={activeKey}
+          />
         </div>
         <div
           className="absolute top-5 right-0 cursor-pointer"
@@ -29,9 +52,7 @@ export const MainLayout = () => {
         </div>
       </div>
       <div className="flex flex-1 flex-col">
-        <div className="flex h-16 shrink-0 items-center bg-gray-100">
-          header
-        </div>
+        <Header />
         <div className="flex h-[calc(100svh-(--spacing(16))))] flex-col overflow-y-auto bg-gray-200">
           <div className="flex-1">
             <Outlet></Outlet>

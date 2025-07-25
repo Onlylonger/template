@@ -1,6 +1,8 @@
 import { createBrowserRouter, Outlet } from "react-router";
 import { MainLayout } from "../components/main-layout/MainLayout";
 import { Home } from "../components/home/Home";
+import { LoginPage } from "../pages/Login";
+import { menuKey } from "./const";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +15,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "login",
-        element: "login",
+        element: <LoginPage />,
       },
       {
         path: "",
@@ -22,14 +24,37 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <Home />,
+            handle: {
+              menuKey: menuKey.home,
+            },
           },
           {
             path: "user",
             element: "user",
+            handle: {
+              menuKey: menuKey.user,
+            },
           },
           {
             path: "role",
             element: "role",
+            handle: {
+              menuKey: menuKey.role,
+            },
+          },
+          {
+            path: "item1",
+            element: "item1",
+            handle: {
+              menuKey: menuKey.item1,
+            },
+          },
+          {
+            path: "item2",
+            element: "item2",
+            handle: {
+              menuKey: menuKey.item2,
+            },
           },
         ],
       },
