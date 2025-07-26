@@ -24,8 +24,8 @@ export const UserPage = () => {
   const handleSearch = () => {
     const val = ref.current?.value;
     if (val) {
-      const filterList = list.filter((v) => {
-        return v.company.indexOf(val) > -1;
+      const filterList = mockList.filter((v) => {
+        return v.company.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
       setList(filterList);
     } else {
@@ -43,6 +43,11 @@ export const UserPage = () => {
             id="name"
             ref={ref}
             className="rounded-md border border-black px-2"
+            onKeyDown={(e) => {
+              if (e.code === "Enter") {
+                handleSearch();
+              }
+            }}
           />
         </div>
         <div className="text-right">
