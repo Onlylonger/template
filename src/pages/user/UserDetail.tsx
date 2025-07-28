@@ -1,12 +1,13 @@
-import { Link, useNavigate } from "react-router";
+import { Button } from "@/components/button";
+import { useNavigate } from "react-router";
 
 export const UserDetailPage = () => {
   const nav = useNavigate();
 
-  const handleLogin = () => {
-    localStorage.setItem("token", "aaa");
-    nav("/");
-  };
-
-  return <div className="">detail</div>;
+  return (
+    <div className="">
+      <div>detail</div>
+      <Button onClick={() => nav(-1)}>Back</Button>
+    </div>
+  );
 };

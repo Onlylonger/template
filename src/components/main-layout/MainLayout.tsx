@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Navigate,
-  Outlet,
   useMatches,
   useNavigate,
+  useOutlet,
   type UIMatch,
 } from "react-router";
 import { Header } from "../header/Header";
@@ -12,14 +12,19 @@ import { NavigationMenu, type MenuItem } from "../menu/NavigationMenu";
 import { getMenuItemByKey, menuList } from "../../router/const";
 import { Tabs } from "../tabs/Tabs";
 import { useTabs } from "../tabs/store";
+import { Activity } from "../activity/Activity";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);
-
+  const cache = useRef(new Map());
   const nav = useNavigate();
-  const match = useMatches() as UIMatch<unknown, { menuKey?: string }>[];
-  const { menuKey } = match[match.length - 1].handle;
-
+  const match = useMatches() as UIMatch<
+    unknown,
+    { menuKey?: string; keepAlive?: boolean }
+  >[];
+  const curMatch = match[match.length - 1];
+  const { menuKey } = curMatch.handle;
+  const outlet = useOutlet();
   const activeKey = menuKey;
 
   const handleCollaps = () => {
@@ -27,8 +32,10 @@ export const MainLayout = () => {
   };
 
   useEffect(() => {
-    if (activeKey) {
+    let flag = false;
+    if (useTabs.getState().list.length === 0 && activeKey) {
       const item = getMenuItemByKey(activeKey);
+      flag = !!item;
       if (item) {
         useTabs.setState({
           list: [
@@ -42,9 +49,11 @@ export const MainLayout = () => {
     }
 
     return () => {
-      useTabs.setState({
-        list: [],
-      });
+      if (flag) {
+        useTabs.setState({
+          list: [],
+        });
+      }
     };
   }, []);
 
@@ -52,11 +61,19 @@ export const MainLayout = () => {
     return <Navigate to="/login" />;
   }
 
+  if (
+    Object.keys(curMatch.params).length === 0 &&
+    !cache.current.has(curMatch.pathname)
+  ) {
+    cache.current.set(curMatch.pathname, outlet);
+  }
+
   return (
     <div className="flex">
       <div
         className={clsx(
           "relative h-svh shrink-0 bg-red-100",
+
           !co ? "w-[160px]" : "w-[60px]",
         )}
       >
@@ -66,13 +83,16 @@ export const MainLayout = () => {
             onClick={async (v: MenuItem) => {
               if (v.newBlank) {
                 window.open(v.url);
+
                 return;
               }
 
               if (v.url) {
                 await nav(v.url);
+
                 useTabs.getState().check({
                   name: v.key,
+
                   label: v.label,
                 });
               }
@@ -103,7 +123,6 @@ export const MainLayout = () => {
             if (item?.key) {
               useTabs.getState().remove(item.key);
             }
-
             // When remove tab is equal to current route
             if (item?.key === activeKey) {
               const nextItem = getMenuItemByKey(nextName);
@@ -113,9 +132,19 @@ export const MainLayout = () => {
             }
           }}
         />
-        <div className="bg-while flex h-[calc(100svh-(--spacing(16))))] flex-col overflow-y-auto">
+        <div className="bg-while flex h-[calc(100svh-(--spacing(18))))] flex-col overflow-y-auto">
           <div className="flex-1 bg-white px-2 py-1">
-            <Outlet></Outlet>
+            {[...cache.current].map(([pathname, value]) => {
+              return (
+                <Activity
+                  key={pathname}
+                  mode={pathname === curMatch.pathname ? "visible" : "hidden"}
+                >
+                  {value}
+                </Activity>
+              );
+            })}
+            {!cache.current.has(curMatch.pathname) && outlet}
           </div>
           <div className="mt-4 shrink-0 bg-white text-center">
             Copyright MIT © {new Date().getFullYear()} Template

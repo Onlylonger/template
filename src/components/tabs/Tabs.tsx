@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTabs } from "./store";
 import clsx from "clsx";
 
