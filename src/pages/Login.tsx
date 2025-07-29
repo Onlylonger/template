@@ -7,7 +7,10 @@ import { useNavigate } from "react-router";
 export const LoginPage = () => {
   const nav = useNavigate();
   const { run, loading, error } = useRequest(login, {
-    manual: false,
+    manual: true,
+    // transformErrorRes(err) {
+    //   return err;
+    // },
   });
 
   const handleLogin = async () => {

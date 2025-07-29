@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import type { CustomError } from "./fetcher";
+import { usePrevious } from "./usePrevious";
+import isEqual from "react-fast-compare";
 
 const defaultHandleTransformErrorRes = (
   err: CustomError<{
@@ -9,13 +11,14 @@ const defaultHandleTransformErrorRes = (
   }>,
 ) => {
   try {
-    return err?.body?.msg;
+    return new Error(err?.body?.msg);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return err;
   }
 };
 
-export type Service<TData, TParams extends any[]> = (
+export type Service<TData, TParams extends unknown[]> = (
   ...args: TParams
 ) => Promise<TData>;
 
@@ -24,23 +27,24 @@ interface ExtendedPromise<T> extends Promise<T> {
   abortController?: AbortController;
 }
 
-export const useRequest = <TData, TParams, Error = unknown>(
+export const useRequest = <TData, TParams extends unknown[]>(
   promiseFn: Service<TData, TParams>,
   options: {
     manual?: boolean;
     params?: TParams;
-    transformErrorRes?: (err: CustomError) => Error;
+    transformErrorRes?: (err: CustomError) => Error | CustomError;
   } = {},
 ) => {
   const {
     manual = true,
-    params = [],
+    params,
     transformErrorRes = defaultHandleTransformErrorRes,
   } = options;
 
-  const [data, setData] = useState<Awaited<ReturnType<F>> | null>(null);
+  const [data, setData] = useState<TData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const preParams = usePrevious(params);
 
   const reset = useCallback(() => {
     setError(null);
@@ -67,21 +71,22 @@ export const useRequest = <TData, TParams, Error = unknown>(
               : err,
           );
           setLoading(false);
-        }) as ReturnType<F>;
+        });
     },
-    [promiseFn],
+    [promiseFn, transformErrorRes],
   );
 
   useEffect(() => {
+    if (isEqual(preParams, params)) return;
     let abort = null;
     if (manual) {
-      const promise = run(...params) as ExtendedPromise<unknown>;
+      const promise = run(...(params as TParams)) as ExtendedPromise<unknown>;
       abort = promise?.abortController;
     }
     return () => {
       abort?.abort();
     };
-  }, [run]);
+  }, [manual, params, preParams, run]);
 
   return {
     data,
