@@ -1,0 +1,17 @@
+import { createFetcher } from "./fetcher";
+
+const { post, get } = createFetcher(
+  "https://m1.apifoxmock.com/m1/6823977-6537947-default",
+  {
+    headers: {
+      apifoxToken: "v0jDZmA67HD_e2HL8dEH2",
+    },
+  },
+);
+
+export const login = (params: { username: string; password: string }) =>
+  post("/auth/login", params);
+
+export const getUserInfo = () => get("/auth/getUserInfo");
+
+export const getUserList = (params: object) => post("/user/list", params);

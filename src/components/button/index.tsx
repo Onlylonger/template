@@ -2,7 +2,7 @@ import { cn } from "@/utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const getBtnClx = cva(
-  "cursor-pointer rounded-md px-2 py-1 hover:bg-gray-200 border border-black",
+  "cursor-pointer rounded-md px-2 py-1 hover:bg-gray-200 border border-black disabled:opacity-40",
   {
     variants: {
       variant: {
