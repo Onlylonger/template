@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { useCallback } from "react";
-import { useEffect } from "react";
+import { useState, useCallback } from "react";
 import type { CustomError } from "./fetcher";
-import { usePrevious } from "./usePrevious";
-import isEqual from "react-fast-compare";
+import { useStableFn } from "./useStableFn";
+import { useCompareEffect2 } from "./useCompareEffect";
 
 const defaultHandleTransformErrorRes = (
   err: CustomError<{
@@ -18,14 +16,10 @@ const defaultHandleTransformErrorRes = (
   }
 };
 
-export type Service<TData, TParams extends unknown[]> = (
-  ...args: TParams
-) => Promise<TData>;
-
-// 定义扩展的 Promise 类型
-interface ExtendedPromise<T> extends Promise<T> {
-  abortController?: AbortController;
-}
+export type Service<TData, TParams extends unknown[]> = (...args: TParams) => {
+  promise: Promise<TData>;
+  controller: AbortController;
+};
 
 export const useRequest = <TData, TParams extends unknown[]>(
   promiseFn: Service<TData, TParams>,
@@ -44,7 +38,8 @@ export const useRequest = <TData, TParams extends unknown[]>(
   const [data, setData] = useState<TData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const preParams = usePrevious(params);
+  const staPromiseFn = useStableFn(promiseFn);
+  const staTransformErrorResFn = useStableFn(transformErrorRes);
 
   const reset = useCallback(() => {
     setError(null);
@@ -53,40 +48,51 @@ export const useRequest = <TData, TParams extends unknown[]>(
   }, []);
 
   const run = useCallback(
-    async (...args: TParams) => {
+    (...args: TParams) => {
       setLoading(true);
       setError(null);
-      const promise = promiseFn(...args);
 
-      return promise
+      const tmp = staPromiseFn(...args);
+
+      const finalPromise = tmp.promise
         .then((res) => {
           setData(res);
           setLoading(false);
+          return res;
         })
         .catch((err) => {
-          if (err.name === "AbortError") return;
-          setError(
-            typeof transformErrorRes === "function"
-              ? transformErrorRes(err)
-              : err,
-          );
           setLoading(false);
+
+          if (err.name === "AbortError") return;
+
+          const tmpErr =
+            typeof staTransformErrorResFn === "function"
+              ? staTransformErrorResFn(err)
+              : err;
+
+          setError(tmpErr);
+          throw tmpErr;
         });
+
+      return {
+        promise: finalPromise,
+        controller: tmp.controller,
+      };
     },
-    [promiseFn, transformErrorRes],
+    [staPromiseFn, staTransformErrorResFn],
   );
 
-  useEffect(() => {
-    if (isEqual(preParams, params)) return;
-    let abort = null;
+  useCompareEffect2(() => {
+    let controller = null;
     if (manual) {
-      const promise = run(...(params as TParams)) as ExtendedPromise<unknown>;
-      abort = promise?.abortController;
+      const tmp = run(...((params ?? []) as TParams));
+      tmp.promise.catch(() => {});
+      controller = tmp.controller;
     }
     return () => {
-      abort?.abort();
+      controller?.abort?.();
     };
-  }, [manual, params, preParams, run]);
+  }, [manual, params, run]);
 
   return {
     data,

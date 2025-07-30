@@ -1,30 +1,28 @@
 import { Button } from "@/components/button";
 import { login } from "@/utils/api";
 import { useRequest } from "@/utils/useRequest";
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { useNavigate } from "react-router";
 
 export const LoginPage = () => {
   const nav = useNavigate();
-  const { run, loading, error } = useRequest(login, {
-    manual: true,
-    // transformErrorRes(err) {
-    //   return err;
-    // },
+  const usernameRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const { run, loading } = useRequest(login, {
+    manual: false,
   });
 
   const handleLogin = async () => {
-    // run({})
     const res = await run({
-      username: "123",
-      password: "123",
-    });
-    console.log(res);
-    // localStorage.setItem("token", "aaa");
-    // nav("/");
+      userName: usernameRef.current?.value ?? "",
+      password: passwordRef.current?.value ?? "",
+    }).promise;
+
+    localStorage.setItem("token", res?.data.token);
+    nav("/");
   };
 
-  console.log(error);
   const userNameId = useId();
   const passwordId = useId();
 
@@ -33,16 +31,13 @@ export const LoginPage = () => {
       <div className="flex flex-col gap-4">
         <div>
           <label htmlFor={userNameId}>Username: </label>
-          <input type="text" id={userNameId} />
+          <input type="text" id={userNameId} ref={usernameRef} />
         </div>
         <div>
           <label htmlFor={passwordId}>Password: </label>
-          <input type="password" id={passwordId} />
+          <input type="password" id={passwordId} ref={passwordRef} />
         </div>
 
-        {/* <div className={clsx("invisible", !!error && "visible")}>
-          Error: {error}
-        </div> */}
         <Button onClick={handleLogin} disabled={loading}>
           login
         </Button>

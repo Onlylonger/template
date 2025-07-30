@@ -13,6 +13,8 @@ import { getMenuItemByKey, menuList } from "../../router/const";
 import { Tabs } from "../tabs/Tabs";
 import { useTabs } from "../tabs/store";
 import { Activity } from "../activity/Activity";
+import { useRequest } from "@/utils/useRequest";
+import { getUserInfo } from "@/utils/api";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);
@@ -22,9 +24,14 @@ export const MainLayout = () => {
     unknown,
     { menuKey?: string; keepAlive?: boolean }
   >[];
+  const outlet = useOutlet();
+
+  const { data } = useRequest(getUserInfo);
+
+  console.log(data);
+
   const curMatch = match[match.length - 1];
   const { menuKey } = curMatch.handle;
-  const outlet = useOutlet();
   const activeKey = menuKey;
 
   const handleCollaps = () => {
