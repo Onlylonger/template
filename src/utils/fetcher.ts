@@ -37,7 +37,6 @@ export const request = (
     if (res.status >= 200 && res.status < 300) {
       return tmp;
     } else {
-      console.log(res);
       openMessageBox(
         tmp?.msg ??
           `${res.status}: ${res.statusText ? res.statusText : httpStatus[res.status]?.msg}`,
@@ -76,13 +75,13 @@ export const createFetcher = (
       opts: CustomRequestInit = {},
     ) {
       const url = new URL(
-        `${pathname}${path}` + "?" + new URLSearchParams(params).toString,
+        `${pathname}${path}` + "?" + new URLSearchParams(params).toString(),
         baseUrl,
       );
 
       return request(
         url,
-        merge(resetBaseOpts, opts, {
+        merge({}, resetBaseOpts, opts, {
           method: "get",
           headers: {
             ...getHeaderFn(),
@@ -95,7 +94,7 @@ export const createFetcher = (
 
       return request(
         url,
-        merge(resetBaseOpts, opts, {
+        merge({}, resetBaseOpts, opts, {
           method: "post",
           body: JSON.stringify(params),
           headers: {

@@ -3,7 +3,7 @@ import type { CustomError } from "./fetcher";
 import { useStableFn } from "./useStableFn";
 import { useCompareEffect2 } from "./useCompareEffect";
 
-const defaultHandleTransformErrorRes = (
+const defaultHandleonError = (
   err: CustomError<{
     msg?: string;
   }>,
@@ -26,20 +26,23 @@ export const useRequest = <TData, TParams extends unknown[]>(
   options: {
     manual?: boolean;
     params?: TParams;
-    transformErrorRes?: (err: CustomError) => Error | CustomError;
+    onError?: (err: CustomError) => Error | CustomError;
+    onSuccess?: (res: CustomError) => void;
   } = {},
 ) => {
   const {
     manual = true,
     params,
-    transformErrorRes = defaultHandleTransformErrorRes,
+    onError = defaultHandleonError,
+    onSuccess,
   } = options;
 
   const [data, setData] = useState<TData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const staPromiseFn = useStableFn(promiseFn);
-  const staTransformErrorResFn = useStableFn(transformErrorRes);
+  const staOnErrorFn = useStableFn(onError);
+  const staOnSuccessFn = useStableFn(onSuccess);
 
   const reset = useCallback(() => {
     setError(null);
@@ -52,26 +55,22 @@ export const useRequest = <TData, TParams extends unknown[]>(
       setLoading(true);
       setError(null);
 
-      const tmp = staPromiseFn(...args);
+      const tmp = staPromiseFn.current(...args);
 
       const finalPromise = tmp.promise
         .then((res) => {
           setData(res);
           setLoading(false);
+          staOnSuccessFn.current?.(res);
           return res;
         })
         .catch((err) => {
-          setLoading(false);
-
           if (err.name === "AbortError") return;
 
-          const tmpErr =
-            typeof staTransformErrorResFn === "function"
-              ? staTransformErrorResFn(err)
-              : err;
-
-          setError(tmpErr);
-          throw tmpErr;
+          setLoading(false);
+          setError(err);
+          staOnErrorFn.current?.(err);
+          throw err;
         });
 
       return {
@@ -79,7 +78,7 @@ export const useRequest = <TData, TParams extends unknown[]>(
         controller: tmp.controller,
       };
     },
-    [staPromiseFn, staTransformErrorResFn],
+    [staPromiseFn, staOnErrorFn, staOnSuccessFn],
   );
 
   useCompareEffect2(() => {

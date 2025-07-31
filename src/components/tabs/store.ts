@@ -6,6 +6,7 @@ interface State {
 
   check: (item: Item) => void;
   remove: (name: string) => void;
+  reset: () => void;
 }
 
 interface Item {
@@ -41,9 +42,15 @@ export const useTabs = create<State>()(
           });
         }
       },
+
+      reset() {
+        set({
+          list: [],
+        });
+      },
     }),
     {
-      name: "position-storage",
+      name: "nav",
       storage: createJSONStorage(() => sessionStorage),
     },
   ),

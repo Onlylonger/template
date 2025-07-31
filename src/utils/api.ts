@@ -6,7 +6,7 @@ const { post, get } = createFetcher(
     getHeaders() {
       const token = localStorage.getItem("token");
       const header: CustomRequestInit["headers"] = {
-        // Authorization: token ? `Bearer ${token}` : "",
+        Authorization: token ? `Bearer ${token}` : "",
       };
       return header;
     },

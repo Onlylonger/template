@@ -1,35 +1,36 @@
 import { Button } from "@/components/button";
+import { getUserList } from "@/utils/api";
+import { useRequest } from "@/utils/useRequest";
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 
-const mockList = [
-  {
-    id: "1",
-    company: "Germany",
-    contact: "Mexico",
-    country: "Francisco Chang",
-  },
-  {
-    id: "2",
-    company: "UK",
-    contact: "MM",
-    country: "LonDon",
-  },
-];
-
 export const UserPage = () => {
-  const [list, setList] = useState(mockList);
+  const [list, setList] = useState([]);
   const ref = useRef<HTMLInputElement | null>(null);
+
+  const {
+    data: res,
+    loading,
+    error,
+  } = useRequest(getUserList, {
+    onSuccess(res) {
+      setList(res?.data?.records);
+    },
+  });
+
+  console.log(error);
+
+  const records = res?.data?.records ?? [];
 
   const handleSearch = () => {
     const val = ref.current?.value;
     if (val) {
-      const filterList = mockList.filter((v) => {
-        return v.company.toLowerCase().indexOf(val.toLowerCase()) > -1;
+      const filterList = records.filter((v) => {
+        return v.userName.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
       setList(filterList);
     } else {
-      setList(mockList);
+      setList(records);
     }
   };
 
@@ -55,28 +56,32 @@ export const UserPage = () => {
         </div>
       </div>
       <div className="">
-        <table>
-          <thead>
-            <tr>
-              <th>Company</th>
-              <th>Contact</th>
-              <th>Country</th>
-            </tr>
-          </thead>
-          <tbody>
-            {list.map((v) => {
-              return (
-                <tr key={v.id}>
-                  <td>{v.company}</td>
-                  <td>{v.contact}</td>
-                  <td>
-                    <Link to={`/user/${v.id}`}>{v.country}</Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {loading ? (
+          "loading...."
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Country</th>
+              </tr>
+            </thead>
+            <tbody>
+              {list.map((v) => {
+                return (
+                  <tr key={v.id}>
+                    <td>{v.userName}</td>
+                    <td>{v.userName}</td>
+                    <td>
+                      <Link to={`/user/${v.id}`}>{v.userName}</Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
