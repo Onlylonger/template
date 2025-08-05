@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router";
+import { createHashRouter, Outlet } from "react-router";
 import { MainLayout } from "../components/main-layout/MainLayout";
 import { Home } from "../components/home/Home";
 import { LoginPage } from "../pages/Login";
@@ -6,7 +6,7 @@ import { menuKey } from "./const";
 import { UserPage } from "../pages/user/User";
 import { UserDetailPage } from "../pages/user/UserDetail";
 
-export const router = createBrowserRouter(
+export const router = createHashRouter(
   [
     {
       path: "/",
@@ -72,6 +72,6 @@ export const router = createBrowserRouter(
     },
   ],
   {
-    basename: "/template",
+    // basename: "template",
   },
 );
