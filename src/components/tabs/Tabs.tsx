@@ -1,5 +1,5 @@
+import { clsx } from "@shilong/utils";
 import { useTabs } from "./store";
-import clsx from "clsx";
 
 export const Tabs = (props: any) => {
   const { activeKey, onClick, onClose } = props;

@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "@shilong/utils";
 import { useState } from "react";
 
 export interface NavigationMenuProps {

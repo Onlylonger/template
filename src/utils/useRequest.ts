@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import type { CustomError } from "./fetcher";
 import { useStableFn } from "./useStableFn";
-import { useCompareEffect2 } from "./useCompareEffect";
+import { useCompareEffect } from "@shilong/utils";
 
 const defaultHandleonError = (
   err: CustomError<{
@@ -81,7 +81,7 @@ export const useRequest = <TData, TParams extends unknown[]>(
     [staPromiseFn, staOnErrorFn, staOnSuccessFn],
   );
 
-  useCompareEffect2(() => {
+  useCompareEffect(() => {
     let controller = null;
     if (manual) {
       const tmp = run(...((params ?? []) as TParams));

@@ -1,6 +1,5 @@
-import { merge } from "lodash-es";
+import { httpStatus, merge, type HttpStatusCode } from "@shilong/utils";
 import { openMessageBox } from "./messagebox";
-import { httpStatus } from "./httpStatus";
 
 export type CustomRequestInit = Omit<RequestInit, "signal">;
 export type BaseOpts = CustomRequestInit & {
@@ -39,7 +38,7 @@ export const request = (
     } else {
       openMessageBox(
         tmp?.msg ??
-          `${res.status}: ${res.statusText ? res.statusText : httpStatus[res.status]?.msg}`,
+          `${res.status}: ${res.statusText ? res.statusText : httpStatus[res.status as HttpStatusCode]?.msg}`,
       );
       return Promise.reject({
         body: tmp,

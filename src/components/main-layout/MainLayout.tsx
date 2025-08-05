@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import {
   Navigate,
@@ -16,6 +15,7 @@ import { Activity } from "../activity/Activity";
 import { useRequest } from "@/utils/useRequest";
 import { getUserInfo } from "@/utils/api";
 import { GlobalProvider } from "./global-context";
+import { clsx } from "@shilong/utils";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);

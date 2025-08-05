@@ -10,6 +10,7 @@ const resolve = (relativePath: string) =>
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: "/template",
   resolve: {
     alias: {
       "@/components": resolve("./src/components"),
