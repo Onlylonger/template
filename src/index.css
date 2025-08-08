@@ -1,1 +1,45 @@
-@import "tailwindcss";
+/* @layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+}
+
+.dark {
+  --sl-front: oklch(0.985 0 0);
+  --sl-bg: oklch(0.145 0 0);
+  --sl-main-bg: oklch(0.922 0 0);
+  --sl-main-front: oklch(0.205 0 0);
+  --sl-secondary-bg: oklch(0.269 0 0);
+  --sl-secondary-front: oklch(0.985 0 0);
+  --sl-accent-front: oklch(0.985 0 0);
+  --sl-accennt-bg: oklch(0.269 0 0);
+  --sl-border: oklch(1 0 0 / 10%);
+  --sl-input: oklch(1 0 0 / 15%);
+}
+
+@theme inline {
+  --color-bg: var(--sl-bg);
+  --color-fg: var(--sl-fg);
+
+  --color-primary-bg: var(--sl-primary-bg);
+  --color-primary-fg: var(--sl-primary-fg);
+
+  --color-secondary-bg: var(--sl-secondary-bg);
+  --color-secondary-fg: var(--sl-secondary-fg);
+
+  --color-accent-bg: var(--sl-accent-bg);
+  --color-accent-fg: var(--sl-accent-fg);
+
+  --color-border: var(--sl-border);
+
+  --color-input: var(--sl-input);
+}
+
+body {
+  @apply bg-bg text-fg;
+} */

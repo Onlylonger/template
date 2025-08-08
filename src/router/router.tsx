@@ -5,6 +5,7 @@ import { LoginPage } from "../pages/Login";
 import { menuKey } from "./const";
 import { UserPage } from "../pages/user/User";
 import { UserDetailPage } from "../pages/user/UserDetail";
+import { ButtonPage } from "@/pages/Button";
 
 export const router = createHashRouter(
   [
@@ -19,6 +20,16 @@ export const router = createHashRouter(
         {
           path: "login",
           element: <LoginPage />,
+        },
+        {
+          path: "components",
+          element: <Outlet />,
+          children: [
+            {
+              index: true,
+              Component: ButtonPage,
+            },
+          ],
         },
         {
           path: "",
