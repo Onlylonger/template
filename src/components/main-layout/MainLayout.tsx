@@ -11,11 +11,11 @@ import { NavigationMenu, type MenuItem } from "../menu/NavigationMenu";
 import { getMenuItemByKey, menuList } from "../../router/const";
 import { Tabs } from "../tabs/Tabs";
 import { useTabs } from "../tabs/store";
-import { Activity } from "../activity/Activity";
 import { useRequest } from "@/utils/useRequest";
 import { getUserInfo } from "@/utils/api";
 import { GlobalProvider } from "./global-context";
 import { clsx } from "@shilong/utils";
+import { Activity } from "@shilong/react";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);

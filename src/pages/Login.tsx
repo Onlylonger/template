@@ -1,4 +1,4 @@
-import { Button } from "@/components/button";
+import { Button, Input } from "@shilong/react";
 import { login } from "@/utils/api";
 import { useRequest } from "@/utils/useRequest";
 import { useId, useRef } from "react";
@@ -31,11 +31,11 @@ export const LoginPage = () => {
       <div className="flex flex-col gap-4">
         <div>
           <label htmlFor={userNameId}>Username: </label>
-          <input type="text" id={userNameId} ref={usernameRef} />
+          <Input type="text" id={userNameId} ref={usernameRef} />
         </div>
         <div>
           <label htmlFor={passwordId}>Password: </label>
-          <input type="password" id={passwordId} ref={passwordRef} />
+          <Input type="password" id={passwordId} ref={passwordRef} />
         </div>
 
         <Button onClick={handleLogin} disabled={loading}>

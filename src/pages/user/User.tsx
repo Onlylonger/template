@@ -1,4 +1,4 @@
-import { Button } from "@/components/button";
+import { Button } from "@shilong/react";
 import { getUserList } from "@/utils/api";
 import { useRequest } from "@/utils/useRequest";
 import { useRef, useState } from "react";
@@ -53,6 +53,12 @@ export const UserPage = () => {
         </div>
         <div className="text-right">
           <Button onClick={handleSearch}>Search</Button>
+          <Button onClick={handleSearch} size="sm">
+            Search
+          </Button>
+          <Button onClick={handleSearch} size="lg">
+            Search
+          </Button>
         </div>
       </div>
       <div className="">

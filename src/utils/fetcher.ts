@@ -1,5 +1,5 @@
 import { httpStatus, merge, type HttpStatusCode } from "@shilong/utils";
-import { openMessageBox } from "./messagebox";
+import { toast } from "@shilong/react";
 
 export type CustomRequestInit = Omit<RequestInit, "signal">;
 export type BaseOpts = CustomRequestInit & {
@@ -36,7 +36,7 @@ export const request = (
     if (res.status >= 200 && res.status < 300) {
       return tmp;
     } else {
-      openMessageBox(
+      toast(
         tmp?.msg ??
           `${res.status}: ${res.statusText ? res.statusText : httpStatus[res.status as HttpStatusCode]?.msg}`,
       );

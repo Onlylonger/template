@@ -13,8 +13,12 @@ export default defineConfig({
   base: "/template",
   resolve: {
     alias: {
-      "@/components": resolve("./src/components"),
-      "@/utils": resolve("./src/utils"),
+      "@": resolve("./src"),
     },
+    // alias: {
+    //   "@/components": resolve("./src/components"),
+    //   "@/utils": resolve("./src/utils"),
+    //   "@/page": resolve("./src/utils"),
+    // },
   },
 });

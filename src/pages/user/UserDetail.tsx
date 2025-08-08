@@ -1,4 +1,4 @@
-import { Button } from "@/components/button";
+import { Button } from "@shilong/react";
 import { useNavigate } from "react-router";
 
 export const UserDetailPage = () => {
