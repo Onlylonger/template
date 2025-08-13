@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@shilong/react": "^0.0.1",
+    "@shilong/react": "^0.0.3",
     "@shilong/utils": "^0.0.8",
     "lodash-es": "^4.17.21",
     "react": "^19.1.0",
