@@ -15,10 +15,5 @@ export default defineConfig({
     alias: {
       "@": resolve("./src"),
     },
-    // alias: {
-    //   "@/components": resolve("./src/components"),
-    //   "@/utils": resolve("./src/utils"),
-    //   "@/page": resolve("./src/utils"),
-    // },
   },
 });

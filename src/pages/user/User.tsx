@@ -1,4 +1,4 @@
-import { Button } from "@shilong/react";
+import { Button } from "@/ui";
 import { getUserList } from "@/utils/api";
 import { useRequest } from "@/utils/useRequest";
 import { useRef, useState } from "react";

@@ -1,7 +1,14 @@
-import { Button, Input, Form, FormItem } from "@shilong/react";
+import { Button, Input, Form, FormItem } from "@/ui";
 import { login } from "@/utils/api";
 import { useRequest } from "@/utils/useRequest";
 import { useNavigate } from "react-router";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/ui/card";
 
 export const LoginPage = () => {
   const nav = useNavigate();
@@ -10,7 +17,7 @@ export const LoginPage = () => {
     manual: false,
   });
 
-  const handleLogin = async (value: { username: string; password: string }) => {
+  const handleLogin = async (value) => {
     const res = await run({
       userName: value.username,
       password: value.password,
@@ -22,36 +29,47 @@ export const LoginPage = () => {
 
   return (
     <div className="flex min-h-svh items-center justify-center">
-      <div className="flex flex-col gap-4">
-        {/* TODO: Form types not right. for on submit func */}
-        {/* TODO: Need a box shadow card */}
-        {/* TODO: The Login widht actically not full width  */}
-        {/* TODO: Developer tailwindcss utilities not cover sl-react component style  */}
-        <Form onSubmit={handleLogin}>
-          <FormItem
-            name="username"
-            label="Username:"
-            render={<Input placeholder="Please input username" />}
-            rules={{
-              required: "Please input username",
-            }}
-          />
-          <FormItem
-            name="password"
-            label="Password:"
-            className="grid"
-            render={
-              <Input type="password" placeholder="Please input password" />
-            }
-            rules={{
-              required: "Please input password",
-            }}
-          />
-          <Button type="submit" disabled={loading}>
-            Login
-          </Button>
-        </Form>
-      </div>
+      <Card className="min-w-sm !gap-1">
+        <CardHeader>
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Welcome user, please log in to continue
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="mt-6">
+          <Form onSubmit={handleLogin}>
+            <FormItem
+              name="username"
+              label="Username:"
+              render={<Input placeholder="Please input username" />}
+              rules={{
+                required: "Please input username",
+              }}
+              vertical
+            />
+            <FormItem
+              name="password"
+              label="Password:"
+              className="grid"
+              render={
+                <Input type="password" placeholder="Please input password" />
+              }
+              rules={{
+                required: "Please input password",
+              }}
+              vertical
+            />
+            <Button
+              type="submit"
+              disabled={loading}
+              loading={loading}
+              className="mt-4 w-full"
+            >
+              Login
+            </Button>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

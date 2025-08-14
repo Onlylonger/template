@@ -6,7 +6,7 @@ import { menuKey } from "./const";
 import { UserPage } from "../pages/user/User";
 import { UserDetailPage } from "../pages/user/UserDetail";
 import { ButtonPage } from "@/pages/Button";
-import { Toaster } from "@shilong/react";
+import { Toaster } from "@/ui";
 
 export const router = createHashRouter(
   [

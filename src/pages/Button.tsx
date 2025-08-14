@@ -1,4 +1,4 @@
-import { Button, type ButtonVariants } from "@shilong/react";
+import { Button, type ButtonVariants } from "@/ui";
 
 const variants: ButtonVariants["variant"][] = [
   "default",
