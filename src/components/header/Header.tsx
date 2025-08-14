@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Button } from "@/ui";
+import { Button } from "@/components/ui/button";
 import { useGlobal } from "../main-layout/global-context";
 import { useTabs } from "../tabs/store";
 

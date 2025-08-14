@@ -15,7 +15,7 @@ import { useRequest } from "@/utils/useRequest";
 import { getUserInfo } from "@/utils/api";
 import { GlobalProvider } from "./global-context";
 import { clsx } from "@shilong/utils";
-import { Activity } from "@/ui";
+import { Activity } from "@shilong/react";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);

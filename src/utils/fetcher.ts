@@ -1,5 +1,5 @@
 import { httpStatus, merge, type HttpStatusCode } from "@shilong/utils";
-import { toast } from "@/ui";
+import { toast } from "sonner";
 
 export type CustomRequestInit = Omit<RequestInit, "signal">;
 export type BaseOpts = CustomRequestInit & {
