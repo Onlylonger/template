@@ -16,6 +16,8 @@ import { getUserInfo } from "@/utils/api";
 import { GlobalProvider } from "./global-context";
 import { clsx } from "@shilong/utils";
 import { Activity } from "@shilong/react";
+import { Aside } from "./aside";
+import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 
 export const MainLayout = () => {
   const [co, setCo] = useState(false);
@@ -84,8 +86,10 @@ export const MainLayout = () => {
         roles: data.roles,
       }}
     >
-      <div className="flex">
-        <div
+      <SidebarProvider>
+        <div className="flex">
+          <Aside />
+          {/* <div
           className={clsx(
             "relative h-svh shrink-0 bg-red-100",
 
@@ -121,53 +125,56 @@ export const MainLayout = () => {
           >
             三
           </div>
-        </div>
-        <div className="flex flex-1 flex-col">
-          <Header />
-          <Tabs
-            activeKey={activeKey}
-            onClick={(v) => {
-              const item = getMenuItemByKey(v.name);
-              if (item?.key === activeKey) return;
-              if (item?.url) {
-                nav(item.url);
-              }
-            }}
-            onClose={(v, nextName) => {
-              const item = getMenuItemByKey(v.name);
-              if (item?.key) {
-                useTabs.getState().remove(item.key);
-                cache.current.delete(item.url);
-              }
-              // When remove tab is equal to current route
-              if (item?.key === activeKey) {
-                const nextItem = getMenuItemByKey(nextName);
-                if (nextItem?.url) {
-                  nav(nextItem.url);
+        </div> */}
+          <div className="flex flex-1 flex-col">
+            <Header />
+            <Tabs
+              activeKey={activeKey}
+              onClick={(v) => {
+                const item = getMenuItemByKey(v.name);
+                if (item?.key === activeKey) return;
+                if (item?.url) {
+                  nav(item.url);
                 }
-              }
-            }}
-          />
-          <div className="bg-while flex h-[calc(100svh-(--spacing(18))))] flex-col overflow-y-auto">
-            <div className="flex-1 bg-white px-2 py-1">
-              {[...cache.current].map(([pathname, value]) => {
-                return (
-                  <Activity
-                    key={pathname}
-                    mode={pathname === curMatch.pathname ? "visible" : "hidden"}
-                  >
-                    {value}
-                  </Activity>
-                );
-              })}
-              {!cache.current.has(curMatch.pathname) && outlet}
-            </div>
-            <div className="mt-4 shrink-0 bg-white text-center">
-              Copyright MIT © {new Date().getFullYear()} Template
+              }}
+              onClose={(v, nextName) => {
+                const item = getMenuItemByKey(v.name);
+                if (item?.key) {
+                  useTabs.getState().remove(item.key);
+                  cache.current.delete(item.url);
+                }
+                // When remove tab is equal to current route
+                if (item?.key === activeKey) {
+                  const nextItem = getMenuItemByKey(nextName);
+                  if (nextItem?.url) {
+                    nav(nextItem.url);
+                  }
+                }
+              }}
+            />
+            <div className="bg-while flex h-[calc(100svh-(--spacing(18))))] flex-col overflow-y-auto">
+              <div className="flex-1 bg-white px-2 py-1">
+                {[...cache.current].map(([pathname, value]) => {
+                  return (
+                    <Activity
+                      key={pathname}
+                      mode={
+                        pathname === curMatch.pathname ? "visible" : "hidden"
+                      }
+                    >
+                      {value}
+                    </Activity>
+                  );
+                })}
+                {!cache.current.has(curMatch.pathname) && outlet}
+              </div>
+              <div className="mt-4 shrink-0 bg-white text-center">
+                Copyright MIT © {new Date().getFullYear()} Template
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </SidebarProvider>
     </GlobalProvider>
   );
 };
