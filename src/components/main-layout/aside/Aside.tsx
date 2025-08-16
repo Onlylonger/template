@@ -1,3 +1,4 @@
+import { useTabs } from "@/components/tabs/store";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -13,58 +14,86 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { menuKey } from "@/router/const";
+import {
+  Calendar,
+  Home,
+  Group,
+  Search,
+  User,
+  KeyRound,
+  ChevronRight,
+} from "lucide-react";
+import { Link, useNavigate } from "react-router";
 
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/",
     icon: Home,
+    key: menuKey.home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "User",
+    url: "/user",
+    icon: User,
+    key: menuKey.user,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Group",
+    icon: Group,
     children: [
       {
-        title: "Calendar-1",
-        url: "#",
+        title: "Item1",
+        url: "/item1",
         icon: Calendar,
+        key: menuKey.item1,
       },
       {
-        title: "Calendar-2",
-        url: "#",
-        icon: Calendar,
+        title: "Item2",
+        url: "/item2",
+        icon: Search,
+        key: menuKey.item2,
       },
     ],
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Role",
+    url: "/role",
+    icon: KeyRound,
+    key: menuKey.role,
   },
 ];
 // General
 
 export const Aside = () => {
+  const nav = useNavigate();
+
+  const handleMenuClick = async (v) => {
+    // if (v.newBlank) {
+    //   window.open(v.url);
+
+    //   return;
+    // }
+
+    if (v.url) {
+      await nav(v.url);
+
+      useTabs.getState().check({
+        name: v.key,
+
+        label: v.label,
+      });
+    }
+  };
+
   return (
     <div>
       <Sidebar variant="floating">
@@ -84,10 +113,12 @@ export const Aside = () => {
                         <SidebarMenuItem>
                           <CollapsibleTrigger asChild>
                             <SidebarMenuButton asChild>
-                              <a href={item.url}>
-                                <item.icon />
-                                <span>{item.title}</span>
-                              </a>
+                              <div>
+                                {item.title}
+                                <SidebarMenuAction>
+                                  <ChevronRight className="transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                                </SidebarMenuAction>
+                              </div>
                             </SidebarMenuButton>
                           </CollapsibleTrigger>
                           <CollapsibleContent>
@@ -96,10 +127,18 @@ export const Aside = () => {
                                 return (
                                   <SidebarMenuSubItem key={subItem.title}>
                                     <SidebarMenuSubButton asChild>
-                                      <a href={subItem.url}>
+                                      <div
+                                        onClick={() =>
+                                          handleMenuClick({
+                                            url: subItem.url,
+                                            key: subItem.key,
+                                            label: subItem.title,
+                                          })
+                                        }
+                                      >
                                         <subItem.icon />
                                         <span>{subItem.title}</span>
-                                      </a>
+                                      </div>
                                     </SidebarMenuSubButton>
                                   </SidebarMenuSubItem>
                                 );
@@ -113,10 +152,18 @@ export const Aside = () => {
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
-                          <a href={item.url}>
+                          <div
+                            onClick={() =>
+                              handleMenuClick({
+                                url: item.url,
+                                key: item.key,
+                                label: item.title,
+                              })
+                            }
+                          >
                             <item.icon />
                             <span>{item.title}</span>
-                          </a>
+                          </div>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     );
