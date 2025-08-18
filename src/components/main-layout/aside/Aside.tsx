@@ -77,8 +77,6 @@ export const Aside = (props: any) => {
   const { activeKey } = props;
   const nav = useNavigate();
 
-  console.log(activeKey);
-
   const handleMenuClick = async (v) => {
     // if (v.newBlank) {
     //   window.open(v.url);

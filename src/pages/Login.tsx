@@ -9,18 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
+import { Form, FormItem, Input } from "@shilong/react";
 
 export const LoginPage = () => {
   const nav = useNavigate();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
   const { run, loading } = useRequest(login, {
     manual: false,
@@ -46,41 +38,31 @@ export const LoginPage = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(handleLogin)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  type="username"
-                  placeholder="please input"
-                  aria-invalid={!!errors.username}
-                  {...register("username", {
-                    required: "please input username",
-                  })}
-                />
-              </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="please input"
-                  aria-invalid={!!errors.password}
-                  {...register("password", {
-                    required: "please input password",
-                  })}
-                />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full" disabled={loading}>
-                  Login
-                </Button>
-              </div>
+          <Form onSubmit={handleLogin}>
+            <FormItem
+              name="username"
+              label="Username"
+              vertical
+              render={<Input placeholder="please input" />}
+              rules={{
+                required: "please input username",
+              }}
+            />
+            <FormItem
+              name="password"
+              label="Password"
+              vertical
+              render={<Input placeholder="please input" type="password" />}
+              rules={{
+                required: "please input password",
+              }}
+            />
+            <div className="flex flex-col gap-3">
+              <Button type="submit" className="w-full" disabled={loading}>
+                Login
+              </Button>
             </div>
-          </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

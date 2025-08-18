@@ -28,7 +28,7 @@ export const Tabs = (props: any) => {
 
               {list.length > 1 && (
                 <X
-                  className="hover:text-foreground hover:bg-accent size-4 rounded-full"
+                  className="hover:bg-primary hover:text-primary-foreground size-4 rounded-full"
                   onClick={(e) => {
                     e.stopPropagation();
 
