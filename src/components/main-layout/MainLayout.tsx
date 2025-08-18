@@ -87,46 +87,9 @@ export const MainLayout = () => {
       }}
     >
       <SidebarProvider>
-        <div className="flex">
-          <Aside />
-          {/* <div
-          className={clsx(
-            "relative h-svh shrink-0 bg-red-100",
-
-            !co ? "w-[160px]" : "w-[60px]",
-          )}
-        >
-          <div className="flex flex-col gap-4">
-            <NavigationMenu
-              list={menuList}
-              onClick={async (v: MenuItem) => {
-                if (v.newBlank) {
-                  window.open(v.url);
-
-                  return;
-                }
-
-                if (v.url) {
-                  await nav(v.url);
-
-                  useTabs.getState().check({
-                    name: v.key,
-
-                    label: v.label,
-                  });
-                }
-              }}
-              activeKey={activeKey}
-            />
-          </div>
-          <div
-            className="absolute top-5 right-0 cursor-pointer"
-            onClick={handleCollaps}
-          >
-            三
-          </div>
-        </div> */}
-          <div className="flex flex-1 flex-col">
+        <div className="flex w-full">
+          <Aside activeKey={activeKey} />
+          <div className="flex flex-1 flex-col px-2">
             <Header />
             <Tabs
               activeKey={activeKey}
@@ -152,7 +115,7 @@ export const MainLayout = () => {
                 }
               }}
             />
-            <div className="bg-while flex h-[calc(100svh-(--spacing(18))))] flex-col overflow-y-auto">
+            <div className="bg-background flex h-[calc(100svh-(--spacing(18))))] flex-col overflow-y-auto">
               <div className="flex-1 bg-white px-2 py-1">
                 {[...cache.current].map(([pathname, value]) => {
                   return (

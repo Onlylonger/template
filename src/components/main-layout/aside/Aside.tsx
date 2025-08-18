@@ -73,8 +73,11 @@ const items = [
 ];
 // General
 
-export const Aside = () => {
+export const Aside = (props: any) => {
+  const { activeKey } = props;
   const nav = useNavigate();
+
+  console.log(activeKey);
 
   const handleMenuClick = async (v) => {
     // if (v.newBlank) {
@@ -95,7 +98,7 @@ export const Aside = () => {
   };
 
   return (
-    <div>
+    <div className="shrink-0">
       <Sidebar variant="floating">
         <SidebarHeader className="text-center">😄 Admin Template</SidebarHeader>
         <SidebarContent>
@@ -111,7 +114,10 @@ export const Aside = () => {
                         key={item.title}
                       >
                         <SidebarMenuItem>
-                          <CollapsibleTrigger asChild>
+                          <CollapsibleTrigger
+                            asChild
+                            className="cursor-pointer"
+                          >
                             <SidebarMenuButton asChild>
                               <div>
                                 {item.title}
@@ -126,7 +132,11 @@ export const Aside = () => {
                               {item.children.map((subItem) => {
                                 return (
                                   <SidebarMenuSubItem key={subItem.title}>
-                                    <SidebarMenuSubButton asChild>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={subItem.key === activeKey}
+                                      className="cursor-pointer"
+                                    >
                                       <div
                                         onClick={() =>
                                           handleMenuClick({
@@ -151,7 +161,11 @@ export const Aside = () => {
                   } else {
                     return (
                       <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={item.key === activeKey}
+                          className="cursor-pointer"
+                        >
                           <div
                             onClick={() =>
                               handleMenuClick({
