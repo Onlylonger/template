@@ -116,7 +116,7 @@ export const MainLayout = () => {
               }}
             />
             <div className="bg-background flex h-[calc(100svh-(--spacing(18))))] flex-col overflow-y-auto">
-              <div className="flex-1 bg-white px-2 py-1">
+              <div className="flex-1 bg-white px-2 py-5">
                 {[...cache.current].map(([pathname, value]) => {
                   return (
                     <Activity
